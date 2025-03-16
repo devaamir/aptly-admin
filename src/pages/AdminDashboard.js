@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Modal from "react-modal";
 import Navbar from "../components/Navbar";
+import api from "../utils/api";
 
 // Bind modal to app element for accessibility
 Modal.setAppElement("#root");
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
   const fetchHospitals = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/admin/hospitals", {
+      const res = await api.get("/admin/hospitals", {
         headers: { "x-auth-token": token },
       });
       setHospitals(res.data);
@@ -43,12 +43,9 @@ const AdminDashboard = () => {
   const fetchDoctors = async (hospitalId) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/admin/doctors/${hospitalId}`,
-        {
-          headers: { "x-auth-token": token },
-        }
-      );
+      const res = await api.get(`/admin/doctors/${hospitalId}`, {
+        headers: { "x-auth-token": token },
+      });
       setDoctors(res.data);
     } catch (err) {
       console.error("Error fetching doctors:", err);
@@ -61,8 +58,8 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       if (isEditingHospital) {
-        const res = await axios.put(
-          `http://localhost:5000/api/admin/hospital/${hospitalForm._id}`,
+        const res = await api.put(
+          `/admin/hospital/${hospitalForm._id}`,
           hospitalForm,
           { headers: { "x-auth-token": token } }
         );
@@ -70,11 +67,9 @@ const AdminDashboard = () => {
           hospitals.map((h) => (h._id === res.data._id ? res.data : h))
         );
       } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/admin/hospital",
-          hospitalForm,
-          { headers: { "x-auth-token": token } }
-        );
+        const res = await api.post("/admin/hospital", hospitalForm, {
+          headers: { "x-auth-token": token },
+        });
         setHospitals([...hospitals, res.data]);
       }
       setHospitalForm({ name: "", location: "" });
@@ -94,18 +89,16 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("token");
       if (isEditingDoctor) {
-        const res = await axios.put(
-          `http://localhost:5000/api/admin/doctor/${doctorForm._id}`,
+        const res = await api.put(
+          `/admin/doctor/${doctorForm._id}`,
           doctorForm,
           { headers: { "x-auth-token": token } }
         );
         setDoctors(doctors.map((d) => (d._id === res.data._id ? res.data : d)));
       } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/admin/doctor",
-          doctorForm,
-          { headers: { "x-auth-token": token } }
-        );
+        const res = await api.post("/admin/doctor", doctorForm, {
+          headers: { "x-auth-token": token },
+        });
         setDoctors([...doctors, res.data]);
       }
       setDoctorForm({
@@ -144,7 +137,7 @@ const AdminDashboard = () => {
     if (window.confirm("Are you sure you want to delete this hospital?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/admin/hospital/${id}`, {
+        await api.delete(`/admin/hospital/${id}`, {
           headers: { "x-auth-token": token },
         });
         setHospitals(hospitals.filter((h) => h._id !== id));
@@ -192,7 +185,7 @@ const AdminDashboard = () => {
     if (window.confirm("Are you sure you want to delete this doctor?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/admin/doctor/${id}`, {
+        await api.delete(`/admin/doctor/${id}`, {
           headers: { "x-auth-token": token },
         });
         setDoctors(doctors.filter((d) => d._id !== id));
