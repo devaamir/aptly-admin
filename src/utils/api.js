@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://aptly-backend.onrender.com", // Replace with your actual Render URL
+  // baseURL: "http://localhost:5000/api/", // Local Server
+  baseURL: "https://aptly-backend.onrender.com/api/", // Production Server
 });
 
 export default api;

@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/api/admin/login", {
+      const res = await api.post("admin/login", {
         email,
         password,
       });
@@ -23,12 +23,12 @@ const AdminLogin = () => {
 
   return (
     <div className="login-container">
-      <h2>Admin Login</h2>
+      <h2>Admin Login LOgin LOgin</h2>
       <form onSubmit={handleLogin}>
         <div>
           <label>Email:</label>
           <input
-            type="email"
+            // type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
